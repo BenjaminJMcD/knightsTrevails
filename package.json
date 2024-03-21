@@ -1,0 +1,26 @@
+{
+  "name": "knightstrevails",
+  "version": "1.0.0",
+  "description": "Utilizing binary search trees to map the shortest path of a knight on an 8x8 chess board from one coordinate to any other coordinate on the board",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack",
+    "start": "webpack serve --open"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BenjaminJMcD/knightsTrevails.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BenjaminJMcD/knightsTrevails/issues"
+  },
+  "homepage": "https://github.com/BenjaminJMcD/knightsTrevails#readme",
+  "devDependencies": {
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
+  }
+}
