@@ -104,6 +104,8 @@ function createAdjList() {
         let bl = i-17;
         let lb = i-10;
 
+
+
     }
 }
 
@@ -122,7 +124,9 @@ function createAdjList() {
 // PUSH MATRIX# TO STEP ARRAY
 // RECURSE FOR ALL IN ARR[MATRIX#] ARRAY
 
-function convertToMatrix(coord) {
+
+
+export function convertToMatrix(coord) {
 
     let matrixNum = coord[0] + 8*coord[1];
 
@@ -130,13 +134,17 @@ function convertToMatrix(coord) {
 
 }
 
-function convertToCoord(matrix) {
+export function convertToCoord(matrix) {
 
-    coord = [];
+    let coord = [];
+
     let x = matrix%8;
     let y = Math.floor(matrix/8);
 
-    return coord[x,y];
+    coord.push(x);
+    coord.push(y);
+
+    return coord;
 
 }
 
