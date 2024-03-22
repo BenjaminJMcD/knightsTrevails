@@ -1,8 +1,9 @@
 
 
 export class Node {
-    constructor(coordinate) {
-        this.coordinate = coordinate;
+    constructor(coord) {
+        this.coord = coord;
+        this.matrix = matrix;
         this.lt = null;
         this.tl = null;
         this.tr = null;
@@ -12,7 +13,43 @@ export class Node {
         this.bl = null;
         this.lb = null;
     }
+
+    // lt = [-2, +1]
+    // tl = [-1. +2]
+    // tr = [+1, +2]
+    // rt = [+2, +1]
+    // rb = [+2, -1]
+    // br = [+1, -2]
+    // bl = [-1, -2]
+    // lb = [-2, -1]
+
+    createNode(coord) {
+
+        let xminus1 = coord[0]-1;
+        let xminus2 = coord[0]-2;
+        let xplus1 = coord[0]+1;
+        let xplus2 = coord[0]+2;
+        let yminus1 = coord[1]-1;
+        let yminus2 = coord[1]-2;
+        let yplus1 = coord[1]+1;
+        let yplus2 = coord[1]+2;
+        
+        this.lt = [xminus2, yplus1];
+        this.tl = [xminus1, yplus2];
+        this.tl = [xplus1, yplus2];
+        this.rt = [xplus2, yplus1];
+        this.rb = [xplus2, yminus1];
+        this.br = [xplus1, yminus2];
+        this.bl = [xminus1, yminus2];
+        this.lb = [xminus2, yminus1];
+
+    }
 }
+
+// CREATING TREE... if coord[0] or coord[1] >7 or <0 == null
+
+// HOW TO STOP IF SINGLE PATH ALREADY HAS COORD ?!?!?!?! 
+// YET ALLOW OTHER PATHS TO HAVE SAME COORD 
 
 export class Tree {
     constructor(array) {
@@ -22,325 +59,86 @@ export class Tree {
 
     buildTree(array, start, end) {
         
-        if (start > end) {
-            return null;
-        }
+        //if (start > end) {
+        //    return null;
+        //}
         
-        let mid = Math.floor((start + end)/2);
+        //let mid = Math.floor((start + end)/2);
 
-        let node = new Node(array[mid]);
+        //let node = new Node(array[mid]);
 
-        node.left = this.buildTree(array, start, mid-1);
-        node.right = this.buildTree(array, mid+1, end);
+        // node.left = this.buildTree(array, start, mid-1);
+        // node.right = this.buildTree(array, mid+1, end);
+
+        // TAKES IN ORIGINATING COORDINATE.
+        // 
 
         return node;
-    }
-
-    insert(value) {
-
-        let root = this.root;
-        findLeaf(value, root);
-
-        function findLeaf(value, node) {
-            if (node == null) {
-                node = new Node(value);
-                return node;
-            }
-            
-            if (value < node.data) {
-                node.left = findLeaf(value, node.left);
-            }
-            else if (value > node.data) {
-                node.right = findLeaf(value, node.right);
-            }
-            return node;
-        }
-    }
-
-    deleteItem(value) {
-
-        let root = this.root;
-        findAndDelete(value, root);
-
-        function findAndDelete (value, node) {
-            if (node == null) {
-                console.log("VALUE DOESN'T EXIST");
-                return null;
-            }
-            
-            if (value < node.data) {
-                node.left = findAndDelete(value, node.left);
-            }
-            else if (value > node.data) {
-                node.right = findAndDelete(value, node.right);
-            }
-            else if (value == node.data) {
-                // DELETE LEAF
-                if (!node.left && !node.right) {
-                    return null;
-                }
-                // DELETE NODE W ONE CHILD
-                else if (node.left == null) {
-                    return node.right;
-                }
-                else if (node.right == null) {
-                    return node.left;
-                }
-                // DELETE NODE WITH TWO CHILDREN
-                else if (node.right && node.left) {
-                    let current = node.right;
-                    let parent = null;
-                    while (current.left) {
-                        parent = current;
-                        current = current.left;
-                        if (current.left == null) {
-                            parent.left = current.right;
-                            node.data = current.data;
-                        }
-
-                    }
-                    return node;
-                }
-            }
-            return node;
-        }
-
-    }
-
-    find(value) {
-
-        let root = this.root;
-
-        function findNode(value, node) {
-            if (node == null) {
-                console.log("VALUE DOESN'T EXIST");
-                return null;
-            }
-            if (value == node.data) {
-                return node;
-            }
-            if (value > node.data) {
-                return findNode(value, node.right);
-            }
-            if (value < node.data) {
-                return findNode(value, node.left);
-            }
-        }
-        return findNode(value, root);
-    }
-
-    levelOrder() {
-
-        let levelOrderArr = [];
-
-        // INITIALIZE QUEUE
-        let queue = [];
-        let root = this.root;
-
-        queue.push(root);
-
-        function breadthFirst(node) {
-            
-            // ADD NODE DATA TO ARRAY
-            levelOrderArr.push(node.data);
-            // REMOVE NODE FROM QUEUE
-            queue.shift();
-
-            // IF !NULL, ADD CHILDREN TO QUEUE
-            if (node.left) {
-            queue.push(node.left);
-            }
-            if (node.right) {
-            queue.push(node.right);
-            }
-            // IF QUEUE, REPEAT WITH FIRST IN QUEUE
-            if (queue.length != 0) {
-            breadthFirst(queue[0]);
-            }
-        }
-        breadthFirst(root);
-        return levelOrderArr;
-    }
-
-    preOrder() {
-        // ROOT, LEFT, RIGHT
-
-        let preOrderArr = [];
-        let root = this.root;
-
-        function preOrderRecurse(node) {
-            if (node == null) {return;}
-            preOrderArr.push(node.data);
-            preOrderRecurse(node.left);
-            preOrderRecurse(node.right);
-        }
-        preOrderRecurse(root);
-        return preOrderArr;
-    }
-
-    inOrder() {
-        // LEFT, ROOT, RIGHT
-
-        let inOrderArr = [];
-        let root = this.root;
-
-        function inOrderRecurse(node) {
-            if (node == null) {return;}
-            inOrderRecurse(node.left);
-            inOrderArr.push(node.data);
-            inOrderRecurse(node.right);
-        }
-        inOrderRecurse(root);
-        return inOrderArr;
-    }
-
-    postOrder() {
-        // LEFT, RIGHT, ROOT
-
-        let postOrderArr = [];
-        let root = this.root;
-
-        function postOrderRecurse(node) {
-            if (node == null) {return;}
-            postOrderRecurse(node.left);
-            postOrderRecurse(node.right);
-            postOrderArr.push(node.data);
-        }
-        postOrderRecurse(root);
-        return postOrderArr;
-    }
-
-    height(value) {
-
-        // RETURNS NODES HEIGHT
-        // HEIGHT == LONGEST PATH FROM NODE TO LEAF
-
-        let node = this.find(value);
-        if (node == null) {return null;}
-
-        function maxDepth(node) {
-            if (node == null) {
-                return 0
-            }
-            else {
-                let lDepth = maxDepth(node.left);
-                let rDepth = maxDepth(node.right);
-
-                if (lDepth > rDepth) {
-                    return (lDepth+1);
-                }
-                else {
-                    return (rDepth+1);
-                }
-            }
-        }
-
-        return maxDepth(node)
-    }
-
-    depth(value) {
-
-        // DEPTH == NUMBER OF EDGES FROM ROOT TO VALUE. ROOT = 0
-
-        let root = this.root;
-        let depth = 0;
-
-        function findNode(value, node) {
-            if (node == null) {
-                console.log("VALUE DOESN'T EXIST");
-                return null;
-            }
-            if (value == node.data) {
-                return depth;
-            }
-            if (value > node.data) {
-                depth++;
-                return findNode(value, node.right);
-            }
-            if (value < node.data) {
-                depth++;
-                return findNode(value, node.left);
-            }
-        }
-        return findNode(value, root);
-    }
-
-    isBalanced() {
-
-        // HEIGHT OF LEFT SUBTREE AND RIGHT SUBTREE IS NOT GREATER THAN 1
-
-        let balanced = true;
-
-        let leftTree = this.root.left.data;
-        let rightTree = this.root.right.data;
-
-        let leftHeight = this.height(leftTree);
-        let rightHeight = this.height(rightTree);
-
-        if (leftHeight - rightHeight > 1) {
-            console.log("Left is UNBALANCE");
-            return balanced = false;
-        }
-        if (rightHeight - leftHeight > 1) {
-            console.log("Right is UNBALANCE");
-            return balanced = false;
-        }
-
-        return balanced
-    }
-
-    rebalance() {
-
-        let orderedArray = this.inOrder();
-
-        let newTree = new Tree(orderedArray);
-
-        this.array = newTree.array
-        this.root = newTree.root
-
-        return this;
-
     }
 
 }
 
 
+// adjacency list w 64 spots
+// function to convert coord to graph/index number
 
+// Y=0 = X COORD
+// Y=1 = X COORD + 8
+// y=2 = X COORD + 16
 
+// +8-2 , +16-1, +16+1, +8+2, -8+2, -16+1, -16-1, -8-2
+//   +6,    +15,   +17,  +10,  -6,   -15.   -17,   -10
 
+// MATRIX# == X + Y*8
 
+function createAdjList() {
+    let adjList = [];
 
-// VISUALIZER OF TREE
-const prettyPrint = (node, prefix = "", isLeft = true) => {
-    if (node === null) {
-      return;
+    for (let i=0; i<64; i++) {
+        let lt = i+6;
+        let tl = i+15;
+        let tr = i+17;
+        let rt = i+10;
+        let rb = i-6;
+        let br = i-15;
+        let bl = i-17;
+        let lb = i-10;
+
     }
-    if (node.right !== null) {
-      prettyPrint(node.right, `${prefix}${isLeft ? "│   " : "    "}`, false);
-    }
-    console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.data}`);
-    if (node.left !== null) {
-      prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
-    }
-};
+}
 
-
-let arr = [20,30,32,34,40,45,50,55,60,65,68,75,80];
-
-let tree = new Tree(arr);
-
-
-tree.insert(61);
-tree.insert(62);
-
-prettyPrint(tree.root);
-
-tree.rebalance();
-
-prettyPrint(tree.root)
+// FROM 0 to 63, take that number +/- the 8. if between 0 63 push to arr[i]
 
 
 
+// FUNCTION TO CONVERT COORD TO MATRIX#
+// FUNCTION TO CONVERT MATRIX# TO COORD
+
+// FUNCTIONS TO CREATE LT TL TR RT RB BR BL LB CONNECTIONS
+
+// SEARCH ARR[MATRIX#] FOR TARGET
+// IF EXISTS, BREAK
+// IF NULL, RETURN
+// PUSH MATRIX# TO STEP ARRAY
+// RECURSE FOR ALL IN ARR[MATRIX#] ARRAY
+
+function convertToMatrix(coord) {
+
+    let matrixNum = coord[0] + 8*coord[1];
+
+    return matrixNum;
+
+}
+
+function convertToCoord(matrix) {
+
+    coord = [];
+    let x = matrix%8;
+    let y = Math.floor(matrix/8);
+
+    return coord[x,y];
+
+}
 
 
 
