@@ -91,22 +91,47 @@ export class Tree {
 
 // MATRIX# == X + Y*8
 
-function createAdjList() {
+export function createAdjList() {
     let adjList = [];
 
     for (let i=0; i<64; i++) {
+
+        let node = adjList[i] = [];
+
         let lt = i+6;
+        if (lt < 64 && i%8 !=0 && i%8 != 1) {
+            node.push(lt);
+        }
         let tl = i+15;
+        if (tl < 64 && i%8 != 0) {
+            node.push(tl);
+        }
         let tr = i+17;
+        if (tr < 64 && i%8 !=7) {
+            node.push(tr);
+        }
         let rt = i+10;
+        if (rt < 64 && i%8 !=7 && i%8 != 6) {
+            node.push(rt);
+        }
         let rb = i-6;
+        if (rb > 0 && i%8 !=7 && i%8 != 6) {
+            node.push(rb);
+        }
         let br = i-15;
+        if (br > 0 && i%8 != 7) {
+            node.push(br);
+        }
         let bl = i-17;
+        if (bl > 0 && i%8 != 0) {
+            node.push(bl);
+        }
         let lb = i-10;
-
-
-
+        if (lb > 0 && i%8 !=0 && i%8 != 1) {
+            node.push(lb);
+        }
     }
+    return adjList
 }
 
 // FROM 0 to 63, take that number +/- the 8. if between 0 63 push to arr[i]
