@@ -1,0 +1,1 @@
+(()=>{"use strict";var o;console.log((o=[3,0])[0]+8*o[1])})();
