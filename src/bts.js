@@ -84,7 +84,7 @@ export function knightMoves(coord1, coord2) {
         // ADD POSITION TO VISITED ARRAY
         visited.push(pos);
     
-        // IF CUURENT POSITION IS TARGET, PRINT TO CONSOLE AND END WHILE LOOP
+        // IF CURRENT POSITION IS TARGET, PRINT TO CONSOLE AND END WHILE LOOP
         if (pos == endPos) {
             let numberMoves = path.length-1;
             let coords = [];
@@ -102,7 +102,7 @@ export function knightMoves(coord1, coord2) {
         let moves = adjList[pos];
     
         moves.forEach((move) => {
-            // IF POSSIBLE MOVES HAVENT BEEN VISITED, MAINTAIN PATH AND ADD MOVE IN LAST POSITION OF PATH TO CHECK FOR MORE MOVES
+            // IF POSSIBLE MOVES HAVENT BEEN VISITED, MAINTAIN PATH AND ADD MOVE IN LAST POSITION OF QUEUE
             if (!visited.includes(move)) {
                 queue.push([...path, move])
             }
